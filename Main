@@ -1,0 +1,7 @@
+#Lucas Roberts #001085316
+#C950 WGUPS Project
+
+import HashTable
+
+packageHash = HashTable()
+
