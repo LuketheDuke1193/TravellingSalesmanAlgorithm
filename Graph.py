@@ -2,8 +2,7 @@
 class Vertex(object):
     def __init__(self, location):
         self.location = location
-        self.distance = 'inf'
-        self.pre_vertex = None
+        self.distance = 0
 
 
 class Graph(object):
@@ -21,3 +20,15 @@ class Graph(object):
     def add_directed_edge(self, from_vertex, to_vertex, weight = 1.0):
         self.edge_weights[(from_vertex, to_vertex)] = weight
         self.adjacency_list[from_vertex].append(to_vertex)
+
+    def map_edges_to_vertices(self, origin):
+        for vertex in self.adjacency_list.get(origin):
+            weight = self.edge_weights.get(origin, vertex).distance
+            vertex.distance = weight #FIXME method returns Vertex object instead of float weight.
+
+
+
+
+
+
+

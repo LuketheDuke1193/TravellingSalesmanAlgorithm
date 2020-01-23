@@ -544,6 +544,8 @@ locations_graph.add_undirected_edge(vertex_city_center_of_rock_springs, vertex_r
 locations_graph.add_undirected_edge(vertex_city_center_of_rock_springs, vertex_wheeler_historic_farm, 1.3)
 locations_graph.add_undirected_edge(vertex_rice_terrace_pavilion_park, vertex_wheeler_historic_farm, 8.3)
 
+locations_graph.map_edges_to_vertices(vertex_hub)
+
 # initialize and load trucks with packages
 truck1 = Truck(1, locations_graph.adjacency_list.get(hub))
 truck2 = Truck(2, locations_graph.adjacency_list.get(hub))
@@ -553,29 +555,45 @@ for i in range(1, 40):
     package_being_loaded = packages.lookup_item(i)
     if "truck 2" in packages.lookup_item(i).notes:
         truck2.add_package(packages.lookup_item(i))
-        packages.lookup_item(i).status_out_for_delivery()
         print('Now loading package #', packages.lookup_item(i).package_id, 'that is headed to',
               packages.lookup_item(i).address, 'onto truck 2')
     elif "Delayed" in packages.lookup_item(i).notes:
         packages.lookup_item(i).status_delayed()
     elif "Must be" in packages.lookup_item(i).notes or packages.lookup_item(i).package_id in (13, 15, 19):
         truck1.add_package(packages.lookup_item(i))
-        packages.lookup_item(i).status_out_for_delivery()
         print('Now loading package #', packages.lookup_item(i).package_id, 'that is headed to',
               packages.lookup_item(i).address, 'onto truck 1')
     elif packages.lookup_item(i).deadline != "EOD":
-        truck2.add_package(packages.lookup_item(i))
-        packages.lookup_item(i).status_out_for_delivery()
+        truck1.add_package(packages.lookup_item(i))
         print('Now loading package #', packages.lookup_item(i).package_id, 'that is headed to',
-              packages.lookup_item(i).address, 'onto truck 2')
+              packages.lookup_item(i).address, 'onto truck 1')
     elif packages.lookup_item(i).deadline == "EOD":
         truck2.add_package(packages.lookup_item(i))
-        packages.lookup_item(i).status_out_for_delivery()
         print('Now loading package #', packages.lookup_item(i).package_id, 'that is headed to',
               packages.lookup_item(i).address, 'onto truck 2')
 
-
+print(truck1.cargo_count)
+print(truck2.cargo_count)
 # create algorithm for delivery of packages
+
+for i in range(1, 40):
+    while truck1.cargo_count != 16:
+        if packages.lookup_item(i).status == "HUB":
+            truck1.add_package(packages.lookup_item(i))
+            packages.lookup_item(i).status_out_for_delivery()
+            print('Now loading package #', packages.lookup_item(i).package_id, 'that is headed to',
+              packages.lookup_item(i).address, 'onto truck 1')
+        else:
+            break
+
+
+print(truck1.cargo_count)
+print(truck2.cargo_count)
+
+truck1.location = locations_graph.find_nearest(vertex_hub)
+print(truck1.location)
+
+
 
 
 # PLACEHOLDER FOR UNUSED CODE

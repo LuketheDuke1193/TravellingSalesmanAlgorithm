@@ -11,15 +11,18 @@ class Truck(object):
 
     def add_package(self, package):
         if self.cargo_count >= 16:
-            print('The truck is full and cannot currently hold anymore packages.')
+            print('Truck ', self.id, ' is full and cannot currently hold anymore packages.')
         else:
             self.cargo.append(package)
             self.cargo_count = self.cargo_count + 1
+            package.status_out_for_delivery()
+            print('Truck ',self.id,' has ',self.cargo_count,' packages currently.')
 
     def remove_package(self, package):
         if self.cargoCount == 0:
             print('The truck is already empty')
         else:
+            package.status_delivered()
             self.cargo.remove(package)
             self.cargo_count = self.cargo_count - 1
 
