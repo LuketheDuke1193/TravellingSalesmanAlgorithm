@@ -11,19 +11,20 @@ class HashTable(object):
     # Hashes key and finds which bucket to insert item into. Appends item to bucket list.
     # O(1)
     def insert(self, item):
-        hashed_key = hash(item.package_id)
+        i = int(item.package_id)
+        hashed_key = hash(i)
         bucket = hashed_key % len(self.table)
         bucket_list = self.table[bucket]
         bucket_list.append(item)
 
     # Finds bucket that key would be in then searches bucket list for matching item.
     # O(N) - N being size of bucket_list
-    def lookup_item(self, key):
-        hashed_key = hash(key)
+    def lookup_item(self, id):
+        hashed_key = hash(id)
         bucket = hashed_key % len(self.table)
         bucket_list = self.table[bucket]
 
         for Package in bucket_list:
-            if Package.package_id == key:
+            if Package.package_id == id:
                 return Package
 
