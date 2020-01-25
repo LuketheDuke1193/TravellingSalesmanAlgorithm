@@ -1,5 +1,5 @@
 class Package:
-    def __init__(self, package_id, address, city, state, zip, deadline, kilo, notes="none"):
+    def __init__(self, package_id, address, city, state, zip, deadline, kilo, notes="none", location=None):
         self.package_id = int(package_id)
         self.address = address
         self.city = city
@@ -9,6 +9,7 @@ class Package:
         self.kilo = kilo
         self.notes = notes
         self.status = "HUB"
+        self.location = location
 
     def get_id(self):
         return self.package_id

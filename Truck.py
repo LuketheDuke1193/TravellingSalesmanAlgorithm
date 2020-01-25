@@ -8,10 +8,11 @@ class Truck(object):
         self.time = datetime.datetime(2020, 1, 1, 8, 00, 00, 00)
         self.odometer = odometer
         self.speed = 18
+        self.cargo_addresses = {}
 
     def add_package(self, package):
         if self.cargo_count >= 16:
-            print('Truck ', self.id, ' is full and cannot currently hold anymore packages.')
+            print('Truck ', self.id, ' is full and cannot currently hold anymore packages. (REF Package #', package.package_id)
         else:
             self.cargo.append(package)
             self.cargo_count = self.cargo_count + 1
