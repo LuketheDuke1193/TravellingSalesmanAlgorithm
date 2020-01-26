@@ -17,17 +17,36 @@ class Truck(object):
             self.cargo.append(package)
             self.cargo_count = self.cargo_count + 1
             package.status_out_for_delivery()
-            print('Truck ',self.id,' has ',self.cargo_count,' packages currently.')
+            print('Added package #',package.package_id,' to Truck ',self.id,'- It now has ',self.cargo_count,' packages loaded.')
 
     def remove_package(self, package):
-        if self.cargoCount == 0:
+        if self.cargo_count == 0:
             print('The truck is already empty')
         else:
             package.status_delivered()
             self.cargo.remove(package)
             self.cargo_count = self.cargo_count - 1
+            self.cargo_addresses.pop(package)
+            print('Truck #', self.id,'just delivered Package #',package.package_id,' to ', self.location.name, 'at ',self.time)
 
     def add_miles(self, miles):
         self.odometer = self.odometer + miles
-        time_advance = (miles / 60) / 60
-        self.time = self.time + datetime.timedelta(0, time_advance)
+        time_advance = miles / ((18 / 60) / 60)
+        self.time = self.time + datetime.timedelta(seconds=time_advance)
+
+    def next_stop(self):
+        next_location = self.location.closest_neighbor(self.cargo_addresses)
+        self.location = next_location[0]
+        self.add_miles(float(next_location[1]))
+
+        for Package, Location in self.cargo_addresses.items():
+            if Location == self.location:
+                package_to_deliver = Package
+                break;
+
+        self.remove_package(package_to_deliver)
+
+    def drive_to(self, location):
+        distance_to_location = self.location.neighbors[location]
+        self.location = location
+        self.add_miles(float(distance_to_location))

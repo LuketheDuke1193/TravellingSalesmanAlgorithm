@@ -16,6 +16,6 @@ class Location:
                 if k[0].name == Location.name:
                     tempList.append(k)
 
-        sorted(tempList, key=lambda loc: loc[0].distance)
+        tempList.sort(key=lambda loc: float(loc[1]))
         return tempList[0]
 

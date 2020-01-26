@@ -14,6 +14,7 @@ packages = HashTable()
 
 # import CSV data for packages and insert into hash table
 # O(N)
+
 with open('WGUPS Package File.csv') as csvfile:
     readPackageCSV = csv.reader(csvfile, delimiter=',')
     for row in readPackageCSV:
@@ -65,6 +66,8 @@ for i in range(1, 40):
         '''print('Now loading package #', packages.lookup_item(i).package_id, 'that is headed to',packages.lookup_item(i).address, 'onto truck 2')'''
     elif "Delayed" in packages.lookup_item(i).notes:
         packages.lookup_item(i).status_delayed()
+    elif "Wrong" in packages.lookup_item(i).notes:
+        packages.lookup_item(i).status_wrong_address()
     elif "Must be" in packages.lookup_item(i).notes or packages.lookup_item(i).package_id in (13, 15, 19):
         truck1.add_package(packages.lookup_item(i))
         '''print('Now loading package #', packages.lookup_item(i).package_id, 'that is headed to',packages.lookup_item(i).address, 'onto truck 1')'''
@@ -82,14 +85,12 @@ while truck1.cargo_count != 16: #FIXME add in constraints from previous round of
     for i in range(1, 40):
         if packages.lookup_item(i).status == "HUB":
             truck1.add_package(packages.lookup_item(i))
-            packages.lookup_item(i).status_out_for_delivery()
             '''print('Now loading package #', packages.lookup_item(i).package_id, 'that is headed to',packages.lookup_item(i).address, 'onto truck 1')'''
 
 while truck2.cargo_count != 16:
     for i in range(1, 40):
         if packages.lookup_item(i).status == "HUB":
             truck2.add_package(packages.lookup_item(i))
-            packages.lookup_item(i).status_out_for_delivery()
             '''print('Now loading package #', packages.lookup_item(i).package_id, 'that is headed to',packages.lookup_item(i).address, 'onto truck 1')'''
 
 print(truck1.cargo_count)
@@ -99,9 +100,35 @@ print(truck2.cargo_count)
 for package in truck1.cargo:
     truck1.cargo_addresses[package] = package.location
 
-print(truck1.location.closest_neighbor(truck1.cargo_addresses))
+while truck1.cargo_count != 0:
+    truck1.next_stop()
 
+for i in range(1,40):
+    print('Package #',packages.lookup_item(i).package_id,'is',packages.lookup_item(i).status)
 
+truck1.drive_to(locations.get('0'))
+ #FIXME add in constraints from previous round of package loading so that items that can only be on truck2 don't get added to truck 1.
+for i in range(1, 40):
+    if packages.lookup_item(i).status == "HUB":
+        truck1.add_package(packages.lookup_item(i))
+    elif packages.lookup_item(i).status == "DELAYED":
+        truck1.add_package(packages.lookup_item(i))
+    elif packages.lookup_item(i).status == "WRONG ADDRESS LISTED":
+        truck1.add_package(packages.lookup_item(i))
+
+print(truck1.cargo_count)
+
+for package in truck1.cargo:
+    truck1.cargo_addresses[package] = package.location
+
+while truck1.cargo_count != 0:
+    truck1.next_stop()
+
+for package in truck2.cargo:
+    truck2.cargo_addresses[package] = package.location
+
+while truck2.cargo_count != 0:
+    truck2.next_stop()
 
 
 

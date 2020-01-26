@@ -22,3 +22,6 @@ class Package:
 
     def status_delayed(self):
         self.status = "DELAYED"
+
+    def status_wrong_address(self):
+        self.status = "WRONG ADDRESS LISTED"
