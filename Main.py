@@ -42,12 +42,12 @@ with open('WGUPSLocations.csv') as csvfile:
     rows = list(readPackageCSV)
 
 for k,v in locations.items():
-    for i in range(0, 26):
+    for i in range(0, 27):
         v.add_neighbor(locations.get(str(i)), rows[i][int(v.id)+3])
 
 # Associates location to each package.
 # O(N^2)
-for i in range(1,40):
+for i in range(1,41):
     package_to_mark = packages.lookup_item(i)
     for k,v in locations.items():
         if package_to_mark.address in v.address:
@@ -59,7 +59,7 @@ truck2 = Truck(2, locations.get(str(0)))
 
 # First round of adding packages
 # O(N)
-for i in range(1, 40):
+for i in range(1, 41):
     package_being_loaded = packages.lookup_item(i)
     if "truck 2" in packages.lookup_item(i).notes:
         truck2.add_package(packages.lookup_item(i))
@@ -82,7 +82,7 @@ print(truck1.cargo_count)
 print(truck2.cargo_count)
 
 while truck1.cargo_count != 16: #FIXME add in constraints from previous round of package loading so that items that can only be on truck2 don't get added to truck 1.
-    for i in range(1, 40):
+    for i in range(1, 41):
         if packages.lookup_item(i).status == "HUB":
             truck1.add_package(packages.lookup_item(i))
             '''print('Now loading package #', packages.lookup_item(i).package_id, 'that is headed to',packages.lookup_item(i).address, 'onto truck 1')'''
@@ -108,7 +108,7 @@ for i in range(1,40):
 
 truck1.drive_to(locations.get('0'))
  #FIXME add in constraints from previous round of package loading so that items that can only be on truck2 don't get added to truck 1.
-for i in range(1, 40):
+for i in range(1, 41):
     if packages.lookup_item(i).status == "HUB":
         truck1.add_package(packages.lookup_item(i))
     elif packages.lookup_item(i).status == "DELAYED":
@@ -130,7 +130,10 @@ for package in truck2.cargo:
 while truck2.cargo_count != 0:
     truck2.next_stop()
 
+for i in range(1,41):
+    print(packages.lookup_item(i).status)
 
+print(truck1.odometer + truck2.odometer)
 
 
 
