@@ -6,9 +6,13 @@ class Location:
         self.distance = distance
         self.neighbors = {}
 
+    # Adds neighbor to neighbors dict with distance as value and location as key
+    # O(1)
     def add_neighbor(self, location, distance):
         self.neighbors[location] = distance
 
+    # Finds specified location's closest neighbor that has a package needing delivered.
+    # O(N^2)
     def closest_neighbor(self, cargo_list):
         tempList = []
         for Package, Location in cargo_list.items():
