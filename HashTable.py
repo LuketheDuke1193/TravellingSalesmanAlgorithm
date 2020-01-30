@@ -1,8 +1,9 @@
-import Package
-
+# Lucas Roberts #001085316
+# C950 WGUPS Project
 
 class HashTable(object):
     # Creates hash table with optional size parameter (defaults to 10). It then adds an empty list to each bucket.
+    # O(N)
     def __init__(self, size=10):
         self.table = []
         for i in range(size):
@@ -19,12 +20,12 @@ class HashTable(object):
 
     # Finds bucket that key would be in then searches bucket list for matching item.
     # O(N) - N being size of bucket_list
-    def lookup_item(self, id):
-        hashed_key = hash(id)
+    def lookup_item(self, item_id):
+        hashed_key = hash(item_id)
         bucket = hashed_key % len(self.table)
         bucket_list = self.table[bucket]
 
-        for Package in bucket_list:
-            if Package.package_id == id:
-                return Package
+        for package in bucket_list:
+            if package.package_id == item_id:
+                return package
 
